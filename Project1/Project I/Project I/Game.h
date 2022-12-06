@@ -21,7 +21,7 @@ public:
 	/// main method for game
 	/// </summary>
 	void run();
-
+	void assignPlayer(int t_playerID);
 private:
 
 	void processEvents();
@@ -36,9 +36,9 @@ private:
 	sf::Time deathTime;
 	sf::Clock deathClock;
 
-	Player m_player1;
-	Player m_player2;
-	Player m_player3;
+	Player m_playerGreen;
+	Player m_playerBlue;
+	Player m_playerYellow;
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
@@ -47,6 +47,10 @@ private:
 	/// Used for displayed each player death Time
 	/// </summary>
 	sf::Text m_deathTimes[3];
+
+	bool isPlayerGreen = false;
+	bool isPlayerBlue= false;
+	bool isPlayerYellow = false;
 
 	bool m_exitGame; // control exiting game
 

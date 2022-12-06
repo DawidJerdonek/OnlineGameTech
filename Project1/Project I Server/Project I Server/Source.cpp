@@ -1,9 +1,7 @@
-/// <summary>
-/// simple game loop for SFML[2.5.1]
-/// 
-/// @author Peter Lowe
-/// @date May 2019
-/// </summary>
+/*
+Author: Dawid Jerdonek
+Date: 06/12/2022
+*/
 
 #ifdef _DEBUG 
 #pragma comment(lib,"sfml-graphics-d.lib") 
@@ -22,14 +20,19 @@
 
 #include "Game.h"
 
-/// <summary>
-/// main enrtry point
-/// </summary>
-/// <returns>success or failure</returns>
+#include "Server.h"
+
 int main()
 {
+	Server MyServer(1111); //Create server on port 100
+	for (int i = 0; i < 100; i++) //Up to 100 times...
+	{
+		MyServer.ListenForNewConnection(); //Accept new connection (if someones trying to connect)
+	}
+
 	Game game;
 	game.run();
 
-	return 1; // success
+	system("pause");
+	return 0;
 }

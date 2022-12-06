@@ -37,7 +37,7 @@ void Player::playerMove()
 
 void Player::chaserCheck()
 {
-	if (isChaser == true)
+	if (m_isChaser == true)
 	{
 		m_playerShape.setFillColor(sf::Color::Red);
 		m_playerShape.setPosition(1000,1000);
@@ -68,13 +68,14 @@ void Player::boundary()
 
 void Player::update(sf::Time t_deltaTime, sf::Time t_deathTime)
 {
-	if (isAlive)
+	if (m_isAlive)
 	{
 		boundary();
+		playerMove();
 	}
-	if (timeDisplayed == false)
+	if (m_timeDisplayed == false)
 	{
-		if (isAlive == false)
+		if (m_isAlive == false)
 		{
 			displayDeathTime(t_deathTime);
 		}
@@ -88,7 +89,7 @@ void Player::render(sf::RenderWindow& m_window)
 
 void Player::displayDeathTime(sf::Time t_time)
 {
-	timeDisplayed = true;
+	m_timeDisplayed = true;
 	std::cout << "player died at 9" << t_time.asSeconds() << std::endl;
 }
 

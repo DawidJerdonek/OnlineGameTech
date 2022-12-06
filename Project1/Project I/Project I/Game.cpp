@@ -62,6 +62,23 @@ void Game::run()
 		render(); // as many as possible
 	}
 }
+void Game::assignPlayer(int t_playerID)
+{
+	if (t_playerID == 0)
+	{
+		isPlayerGreen = true;
+	}
+	else if (t_playerID == 1)
+	{
+		isPlayerBlue = true;
+	}
+	else if (t_playerID == 2)
+	{
+		isPlayerYellow= true;
+	}
+
+}
+
 /// <summary>
 /// handle user and system events/ input
 /// get key presses/ mouse moves etc. from OS
@@ -103,14 +120,25 @@ void Game::processKeys(sf::Event t_event)
 void Game::update(sf::Time t_deltaTime)
 {
 	deathTime = deathClock.getElapsedTime();
-	m_player1.update(t_deltaTime, deathTime);
-	m_player2.update(t_deltaTime, deathTime);
-	m_player3.update(t_deltaTime, deathTime);
-	
-	if (m_player1.isAlive)
+	if (isPlayerGreen)
 	{
-		m_player1.playerMove();
+		m_playerGreen.update(t_deltaTime, deathTime);
 	}
+	if (isPlayerBlue)
+	{
+		m_playerBlue.update(t_deltaTime, deathTime);
+	}
+	if (isPlayerYellow)
+	{
+		m_playerYellow.update(t_deltaTime, deathTime);
+	}
+
+
+	
+	//if (m_player1.isAlive)
+	//{
+	//	m_player1.playerMove();
+	//}
 	checkIfCaught();
 	m_chaseMessage.setString("Red is the chaser\nTime elapsed: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
 	if (m_exitGame)
@@ -127,9 +155,9 @@ void Game::render()
 	m_window.clear(sf::Color::Black);
 	m_window.draw(m_chaseMessage);
 
-	m_player1.render(m_window);
-	m_player2.render(m_window);
-	m_player3.render(m_window);
+	m_playerGreen.render(m_window);
+	m_playerBlue.render(m_window);
+	m_playerYellow.render(m_window);
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -177,31 +205,31 @@ void Game::chooseChaser()
 {
 	srand(time(NULL));
 	int chaserNum = rand() % 3 + 1;
-	m_player1.m_playerShape.setFillColor(sf::Color::Green);
-	m_player2.m_playerShape.setFillColor(sf::Color::Blue);
-	m_player3.m_playerShape.setFillColor(sf::Color::Yellow);
+	m_playerGreen.m_playerShape.setFillColor(sf::Color::Green);
+	m_playerBlue.m_playerShape.setFillColor(sf::Color::Blue);
+	m_playerYellow.m_playerShape.setFillColor(sf::Color::Yellow);
 	if (chaserNum == 1)
 	{
-		m_player1.isChaser = true;
-		m_player2.m_playerShape.setPosition(200, 200);
-		m_player3.m_playerShape.setPosition(1700, 200);
+		m_playerGreen.m_isChaser = true;
+		m_playerBlue.m_playerShape.setPosition(200, 200);
+		m_playerYellow.m_playerShape.setPosition(1700, 200);
 	}
 	else if (chaserNum == 2)
 	{
-		m_player2.isChaser = true;
-		m_player1.m_playerShape.setPosition(200, 200);
-		m_player3.m_playerShape.setPosition(1700, 200);
+		m_playerBlue.m_isChaser = true;
+		m_playerGreen.m_playerShape.setPosition(200, 200);
+		m_playerYellow.m_playerShape.setPosition(1700, 200);
 	}
 	else if (chaserNum == 3)
 	{
-		m_player3.isChaser = true;
-		m_player1.m_playerShape.setPosition(200, 200);
-		m_player2.m_playerShape.setPosition(1700, 200);
+		m_playerYellow.m_isChaser = true;
+		m_playerGreen.m_playerShape.setPosition(200, 200);
+		m_playerBlue.m_playerShape.setPosition(1700, 200);
 	}
 	
-	m_player1.chaserCheck();
-	m_player2.chaserCheck();
-	m_player3.chaserCheck();
+	m_playerGreen.chaserCheck();
+	m_playerBlue.chaserCheck();
+	m_playerYellow.chaserCheck();
 }
 
 void Game::checkIfCaught()
@@ -212,68 +240,68 @@ void Game::checkIfCaught()
 	/// Player 3 = Yellow
 	/// </summary>
 	/// 
-	if (m_player1.m_playerShape.getGlobalBounds().intersects(m_player2.m_playerShape.getGlobalBounds()))
+	if (m_playerGreen.m_playerShape.getGlobalBounds().intersects(m_playerBlue.m_playerShape.getGlobalBounds()))
 	{
-		if (m_player1.isChaser)
+		if (m_playerGreen.m_isChaser)
 		{
 			//std::cout << "Chaser Red and Player Blue are colliding" << std::endl;
 	
-			if (m_player2.isAlive)
+			if (m_playerBlue.m_isAlive)
 			{
 				m_deathTimes[1].setString("Player Blue has survived for: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
-				m_player2.isAlive = false;
+				m_playerBlue.m_isAlive = false;
 			}
 		}
-		else if (m_player2.isChaser)
+		else if (m_playerBlue.m_isChaser)
 		{
 			//std::cout << "Chaser Red and Player Green are colliding" << std::endl;
-			if (m_player1.isAlive)
+			if (m_playerGreen.m_isAlive)
 			{
 				m_deathTimes[0].setString("Player Green has survived for: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
-				m_player1.isAlive = false;
+				m_playerGreen.m_isAlive = false;
 			}
 		}
 		
 	}
-	if (m_player2.m_playerShape.getGlobalBounds().intersects(m_player3.m_playerShape.getGlobalBounds()))
+	if (m_playerBlue.m_playerShape.getGlobalBounds().intersects(m_playerYellow.m_playerShape.getGlobalBounds()))
 	{
-		if (m_player2.isChaser)
+		if (m_playerBlue.m_isChaser)
 		{
 			//std::cout << "Chaser Red and Player Yellow are colliding" << std::endl;
-			if (m_player3.isAlive)
+			if (m_playerYellow.m_isAlive)
 			{
 				m_deathTimes[2].setString("Player Yellow has survived for: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
-				m_player3.isAlive = false;
+				m_playerYellow.m_isAlive = false;
 			}
 		}
-		else if (m_player3.isChaser)
+		else if (m_playerYellow.m_isChaser)
 		{
 			//std::cout << "Chaser Red and Player Blue are colliding" << std::endl;
-			if (m_player2.isAlive)
+			if (m_playerBlue.m_isAlive)
 			{
 				m_deathTimes[1].setString("Player Blue has survived for: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
-				m_player2.isAlive = false;
+				m_playerBlue.m_isAlive = false;
 			}
 		}
 	}
-	if (m_player1.m_playerShape.getGlobalBounds().intersects(m_player3.m_playerShape.getGlobalBounds()))
+	if (m_playerGreen.m_playerShape.getGlobalBounds().intersects(m_playerYellow.m_playerShape.getGlobalBounds()))
 	{
-		if (m_player1.isChaser)
+		if (m_playerGreen.m_isChaser)
 		{
 			//std::cout << "Chaser Red and Player Yellow are colliding" << std::endl;
-			if (m_player3.isAlive)
+			if (m_playerYellow.m_isAlive)
 			{
 				m_deathTimes[2].setString("Player Yellow has survived for: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
-				m_player3.isAlive = false;
+				m_playerYellow.m_isAlive = false;
 			}
 		}
-		else if (m_player3.isChaser)
+		else if (m_playerYellow.m_isChaser)
 		{
 			//std::cout << "Chaser Red and Player Green are colliding" << std::endl;
-			if (m_player1.isAlive)
+			if (m_playerGreen.m_isAlive)
 			{
 				m_deathTimes[0].setString("Player Green has survived for: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
-				m_player1.isAlive = false;
+				m_playerGreen.m_isAlive = false;
 			}
 		}
 	}
