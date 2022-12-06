@@ -81,3 +81,15 @@ bool Client::GetString(std::string & _string)
 	delete[] buffer; //Deallocate buffer memory (cleanup to prevent memory leak)
 	return true;//Return true if we were successful in retrieving the string
 }
+
+bool Client::SendPosition(std::string _string, int _ID)
+{
+		if (!SendPacketType(P_Position)) //Send packet type: Position, If sending packet type fails...
+		return false; //Return false: Failed to send Position
+	int bufferlength = _string.size(); //Find string buffer length
+	if (!SendInt(bufferlength)) //Send length of string buffer, If sending buffer length fails...
+		return false; //Return false: Failed to send string buffer length
+	if (!sendall((char*)_string.c_str(), bufferlength)) //Try to send string buffer... If buffer fails to send,
+		return false; //Return false: Failed to send string buffer
+	return true; //Return true: string successfully sent
+}

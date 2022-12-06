@@ -9,7 +9,8 @@ enum Packet
 {
 	P_ChatMessage,
 	P_Test,
-	P_Id
+	P_Id,
+	P_Position
 };
 
 class Server

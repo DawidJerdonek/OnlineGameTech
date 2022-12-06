@@ -1,5 +1,5 @@
-﻿  Game.cpp
-C:\Users\gameuser\Desktop\OnlineGameTech\OnlineGameTech\Project1\Project I\Project I\Game.cpp(206,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+﻿  Client.cpp
+  SendGetMethods.cpp
   Source.cpp
   Generating Code...
   Project I.vcxproj -> C:\Users\gameuser\Desktop\OnlineGameTech\OnlineGameTech\Project1\Project I\Debug\Project I.exe

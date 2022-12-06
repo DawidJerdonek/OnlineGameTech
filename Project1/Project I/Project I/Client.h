@@ -11,7 +11,8 @@ enum Packet
 {
 	P_ChatMessage,
 	P_Test,
-	P_Id
+	P_Id,
+	P_Position
 };
 
 class Client
@@ -30,7 +31,7 @@ private: //Private functions
 	bool sendall(char * data, int totalbytes);
 	bool SendInt(int _int);
 	bool SendPacketType(Packet _packettype);
-	
+	bool SendPosition(std::string _string, int _ID);
 
 	//Getting Funcs
 	bool recvall(char * data, int totalbytes);
