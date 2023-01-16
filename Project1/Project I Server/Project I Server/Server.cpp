@@ -77,6 +77,25 @@ bool Server::ProcessPacket(int ID, Packet _packettype)
 		std::cout << "Processed chat message packet from user ID: " << ID << std::endl;
 		break;
 	}
+	case P_Vector2f:
+	{
+		sf::Vector2f Message; //string to store our message we received
+		int IDTwo = 999;
+		if (!GetVector(ID, Message, IDTwo)) //Get the chat message and store it in variable: Message
+			return false; //If we do not properly get the chat message, return false
+		//Next we need to send the message out to each user
+		for (int i = 0; i < TotalConnections; i++)
+		{
+			if (i == ID) //If connection is the user who sent the message...
+				continue;//Skip to the next user since there is no purpose in sending the message back to the user who sent it.
+			if (!SendVector(i, Message, ID)) //Send message to connection at index i, if message fails to be sent...
+			{
+				std::cout << "Failed to send message from client ID: " << ID << " to client ID: " << i << std::endl;
+			}
+		}
+		std::cout << "Processed chat message packet from user ID: " << ID << std::endl;
+		break;
+	}
 	default: //If packet type is not accounted for
 	{
 		std::cout << "Unrecognized packet: " << _packettype << std::endl; //Display that packet was not found
@@ -85,6 +104,41 @@ bool Server::ProcessPacket(int ID, Packet _packettype)
 	}
 	
 	return true;
+}
+
+std::vector<std::string> Server::splitString(std::string string)
+{
+	std::string s = "";
+	std::vector<std::string> t_values;
+
+	for (auto x : string)
+	{
+		if (x == ',')
+		{
+			t_values.push_back(s);
+			s = "";
+		}
+		else {
+			s = s + x;
+		}
+	}
+
+	t_values.push_back(s);
+	return t_values;
+
+}
+
+void Server::ReadyToPlay()
+{
+	if (TotalConnections == 3 && gameReady == false)
+	{
+		gameReady = true;
+		std::string startKey = "BeginGame";
+		for (int i = 0; i < 3; i++)
+		{
+			SendString(i,startKey);
+		}
+	}
 }
 
 void Server::ClientHandlerThread(int ID) //ID = the index in the SOCKET Connections array
@@ -101,3 +155,4 @@ void Server::ClientHandlerThread(int ID) //ID = the index in the SOCKET Connecti
 	closesocket(serverptr->Connections[ID]);
 	return;
 }
+

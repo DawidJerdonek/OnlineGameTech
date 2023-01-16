@@ -6,7 +6,7 @@ public:
 	Player();
 	~Player();
 
-	void playerMove();
+	void playerMove(sf::Event t_event);
 	void chaserCheck();
 	void boundary();
 

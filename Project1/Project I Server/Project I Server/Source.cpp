@@ -28,6 +28,7 @@ int main()
 	for (int i = 0; i < 100; i++) //Up to 100 times...
 	{
 		MyServer.ListenForNewConnection(); //Accept new connection (if someones trying to connect)
+		MyServer.ReadyToPlay();
 	}
 
 	Game game;

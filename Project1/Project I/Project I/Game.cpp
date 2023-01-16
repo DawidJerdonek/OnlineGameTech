@@ -42,8 +42,11 @@ Game::~Game()
 /// draw as often as possible but only updates are on time
 /// if updates run slow then don't render frames
 /// </summary>
-void Game::run()
+void Game::run(Client& t_client)
 {	
+	m_client = &t_client;
+
+	
 	deathClock.restart();
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
@@ -74,7 +77,7 @@ void Game::assignPlayer(int t_playerID)
 	}
 	else if (t_playerID == 2)
 	{
-		isPlayerYellow= true;
+		isPlayerYellow = true;
 	}
 
 }
@@ -95,6 +98,7 @@ void Game::processEvents()
 		}
 		if (sf::Event::KeyPressed == newEvent.type) //user pressed a key
 		{
+			
 			processKeys(newEvent);
 		}
 	}
@@ -107,10 +111,29 @@ void Game::processEvents()
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
+	if (m_client->readyToPlay == true)
+	{
+		if (isPlayerYellow)
+		{
+			m_playerYellow.playerMove(t_event);
+			m_yellowPos = m_playerYellow.m_playerShape.getPosition();
+		}
+		else if (isPlayerGreen)
+		{
+			m_playerGreen.playerMove(t_event);
+			m_greenPos = m_playerGreen.m_playerShape.getPosition();
+		}
+		else if (isPlayerBlue)
+		{
+			m_playerBlue.playerMove(t_event);
+			m_bluePos = m_playerBlue.m_playerShape.getPosition();
+		}
+	}
 	if (sf::Keyboard::Escape == t_event.key.code)
 	{
 		m_exitGame = true;
 	}
+
 }
 
 /// <summary>
@@ -119,28 +142,35 @@ void Game::processKeys(sf::Event t_event)
 /// <param name="t_deltaTime">time interval per frame</param>
 void Game::update(sf::Time t_deltaTime)
 {
-	deathTime = deathClock.getElapsedTime();
-	if (isPlayerGreen)
+	if (m_client->readyToPlay == true)
 	{
-		m_playerGreen.update(t_deltaTime, deathTime);
-	}
-	if (isPlayerBlue)
-	{
-		m_playerBlue.update(t_deltaTime, deathTime);
-	}
-	if (isPlayerYellow)
-	{
-		m_playerYellow.update(t_deltaTime, deathTime);
-	}
+		deathTime = deathClock.getElapsedTime();
+		if (isPlayerGreen)
+		{
+			m_playerGreen.update(t_deltaTime, deathTime);
+			m_client->SendVector(0,m_playerGreen.m_playerShape.getPosition());
+		}
+		if (isPlayerBlue)
+		{
+			m_playerBlue.update(t_deltaTime, deathTime);
+			m_client->SendVector(1, m_playerGreen.m_playerShape.getPosition());
+		}
+		if (isPlayerYellow)
+		{
+			m_playerYellow.update(t_deltaTime, deathTime);
+			m_client->SendVector(2, m_playerGreen.m_playerShape.getPosition());
+		}
 
 
-	
-	//if (m_player1.isAlive)
-	//{
-	//	m_player1.playerMove();
-	//}
-	checkIfCaught();
-	m_chaseMessage.setString("Red is the chaser\nTime elapsed: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
+
+		//if (m_player1.isAlive)
+		//{
+		//	m_player1.playerMove();
+		//}
+		checkIfCaught();
+		m_chaseMessage.setString("Red is the chaser\nTime elapsed: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
+
+	}
 	if (m_exitGame)
 	{
 		m_window.close();
@@ -203,33 +233,33 @@ void Game::setupFontAndText()
 
 void Game::chooseChaser()
 {
-	srand(time(NULL));
-	int chaserNum = rand() % 3 + 1;
+	//srand(time(NULL));
+	//int chaserNum = rand() % 3 + 1;
 	m_playerGreen.m_playerShape.setFillColor(sf::Color::Green);
 	m_playerBlue.m_playerShape.setFillColor(sf::Color::Blue);
 	m_playerYellow.m_playerShape.setFillColor(sf::Color::Yellow);
-	if (chaserNum == 1)
-	{
-		m_playerGreen.m_isChaser = true;
+	//if (chaserNum == 1)
+	//{
+	//	m_playerGreen.m_isChaser = true;
 		m_playerBlue.m_playerShape.setPosition(200, 200);
 		m_playerYellow.m_playerShape.setPosition(1700, 200);
-	}
-	else if (chaserNum == 2)
-	{
-		m_playerBlue.m_isChaser = true;
-		m_playerGreen.m_playerShape.setPosition(200, 200);
-		m_playerYellow.m_playerShape.setPosition(1700, 200);
-	}
-	else if (chaserNum == 3)
-	{
-		m_playerYellow.m_isChaser = true;
-		m_playerGreen.m_playerShape.setPosition(200, 200);
-		m_playerBlue.m_playerShape.setPosition(1700, 200);
-	}
-	
-	m_playerGreen.chaserCheck();
-	m_playerBlue.chaserCheck();
-	m_playerYellow.chaserCheck();
+	//}
+	//else if (chaserNum == 2)
+	//{
+	//	m_playerBlue.m_isChaser = true;
+	//	m_playerGreen.m_playerShape.setPosition(200, 200);
+	//	m_playerYellow.m_playerShape.setPosition(1700, 200);
+	//}
+	//else if (chaserNum == 3)
+	//{
+	//	m_playerYellow.m_isChaser = true;
+	//	m_playerGreen.m_playerShape.setPosition(200, 200);
+	//	m_playerBlue.m_playerShape.setPosition(1700, 200);
+	//}
+	//
+	//m_playerGreen.chaserCheck();
+	//m_playerBlue.chaserCheck();
+	//m_playerYellow.chaserCheck();
 }
 
 void Game::checkIfCaught()

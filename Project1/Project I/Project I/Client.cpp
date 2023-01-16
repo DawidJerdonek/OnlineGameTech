@@ -9,16 +9,41 @@ bool Client::ProcessPacket(Packet _packettype)
 		std::string Message; //string to store our message we received
 		if (!GetString(Message)) //Get the chat message and store it in variable: Message
 			return false; //If we do not properly get the chat message, return false
+
+		if (Message == "BeginGame")
+		{
+			readyToPlay = true;
+		}
 		std::cout << Message << std::endl; //Display the message to the user
 		break;
 	}
 	case P_Id:
 	{
-		int id = 0;
+		int id = 9999;
 		GetInt(id);
 		m_playerId = id;
 		std::cout <<"Player ID: " << m_playerId << std::endl;
 		break;
+	}
+	case P_Vector2f:
+	{
+		int id = 9999;
+		sf::Vector2f vector;
+		if (!GetVector(id, vector))
+			return false;
+
+		switch (id)
+		{
+		case 0:
+			
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		default:
+			break;
+		}
 	}
 	default: //If packet type is not accounted for
 		std::cout << "Unrecognized packet: " << _packettype << std::endl; //Display that packet was not found
@@ -91,4 +116,26 @@ bool Client::CloseConnection()
 		return false;
 	}
 	return true;
+}
+
+std::vector<std::string> Client::splitString(std::string string)
+{
+	std::string s = "";
+	std::vector<std::string> t_values;
+
+	for (auto x : string)
+	{
+		if (x == ',')
+		{
+			t_values.push_back(s);
+			s = "";
+		}
+		else {
+			s = s + x;
+		}
+	}
+
+	t_values.push_back(s);
+	return t_values;
+
 }

@@ -81,12 +81,48 @@ bool Client::GetString(std::string & _string)
 	delete[] buffer; //Deallocate buffer memory (cleanup to prevent memory leak)
 	return true;//Return true if we were successful in retrieving the string
 }
+//
+//bool Client::SendPosition(std::string _string, int _ID)
+//{
+//		if (!SendPacketType(P_Position)) //Send packet type: Position, If sending packet type fails...
+//		return false; //Return false: Failed to send Position
+//	int bufferlength = _string.size(); //Find string buffer length
+//	if (!SendInt(bufferlength)) //Send length of string buffer, If sending buffer length fails...
+//		return false; //Return false: Failed to send string buffer length
+//	if (!sendall((char*)_string.c_str(), bufferlength)) //Try to send string buffer... If buffer fails to send,
+//		return false; //Return false: Failed to send string buffer
+//	return true; //Return true: string successfully sent
+//}
 
-bool Client::SendPosition(std::string _string, int _ID)
+bool Client::GetVector(int& ID, sf::Vector2f& position)
 {
-		if (!SendPacketType(P_Position)) //Send packet type: Position, If sending packet type fails...
-		return false; //Return false: Failed to send Position
+	int bufferlength; //Holds length of the message
+	if (!GetInt (bufferlength)) //Get length of buffer and store it in variable: bufferlength
+		return false; //If get int fails, return false
+	char* buffer = new char[bufferlength + 1]; //Allocate buffer
+	buffer[bufferlength] = '\0'; //Set last character of buffer to be a null terminator so we aren't printing memory that we shouldn't be looking at
+	if (!recvall( buffer, bufferlength)) //receive message and store the message in buffer array. If buffer fails to be received...
+	{
+		delete[] buffer; //delete buffer to prevent memory leak
+		return false; //return false: Fails to receive string buffer
+	}
+
+	std::vector<std::string> posInfo = splitString(buffer);
+	ID = std::stoi(posInfo[0]);
+	position = sf::Vector2f(std::stoi(posInfo[1]), std::stoi(posInfo[2]));
+
+	delete[] buffer; //Deallocate buffer memory (cleanup to prevent memory leak)
+	return true;//Return true if we were successful in retrieving the string
+}
+
+bool Client::SendVector(int _ID, sf::Vector2f _position)
+{
+	if (!SendPacketType(P_Vector2f)) //Send packet type: Vector, If sending packet type fails...
+		return false; //Return false: Failed 
+
+	std::string _string = std::to_string(_ID) + "," + std::to_string(_position.x) + "," + std::to_string(_position.y);
 	int bufferlength = _string.size(); //Find string buffer length
+
 	if (!SendInt(bufferlength)) //Send length of string buffer, If sending buffer length fails...
 		return false; //Return false: Failed to send string buffer length
 	if (!sendall((char*)_string.c_str(), bufferlength)) //Try to send string buffer... If buffer fails to send,

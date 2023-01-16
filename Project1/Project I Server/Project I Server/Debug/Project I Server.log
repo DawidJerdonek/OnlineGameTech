@@ -1,5 +1,15 @@
 ﻿  SendGetMethods.cpp
+C:\Users\DJay Gaming\Desktop\gametech\OnlineGameTechLab1\Project1\Project I Server\Project I Server\SendGetMethods.cpp(109,58): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\DJay Gaming\Desktop\gametech\OnlineGameTechLab1\Project1\Project I Server\Project I Server\SendGetMethods.cpp(109,35): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
   Server.cpp
   Source.cpp
   Generating Code...
-  Project I Server.vcxproj -> C:\Users\gameuser\Desktop\OnlineGameTech\OnlineGameTech\Project1\Project I Server\Debug\Project I Server.exe
+  Project I Server.vcxproj -> C:\Users\DJay Gaming\Desktop\gametech\OnlineGameTechLab1\Project1\Project I Server\Debug\Project I Server.exe

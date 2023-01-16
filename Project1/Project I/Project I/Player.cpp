@@ -15,21 +15,21 @@ Player::~Player()
 {
 }
 
-void Player::playerMove()
+void Player::playerMove(sf::Event t_event)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	if (sf::Keyboard::W == t_event.key.code || sf::Keyboard::Up == t_event.key.code)
 	{
 		m_playerShape.move(0, -m_speed);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	if (sf::Keyboard::A == t_event.key.code || sf::Keyboard::Left == t_event.key.code)
 	{
 		m_playerShape.move(-m_speed, 0);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	if (sf::Keyboard::S == t_event.key.code || sf::Keyboard::Down == t_event.key.code)
 	{
 		m_playerShape.move(0, m_speed);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	if (sf::Keyboard::D == t_event.key.code || sf::Keyboard::Right == t_event.key.code)
 	{
 		m_playerShape.move(m_speed, 0);
 	}
@@ -71,7 +71,7 @@ void Player::update(sf::Time t_deltaTime, sf::Time t_deathTime)
 	if (m_isAlive)
 	{
 		boundary();
-		playerMove();
+		
 	}
 	if (m_timeDisplayed == false)
 	{

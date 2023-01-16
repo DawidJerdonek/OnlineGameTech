@@ -11,6 +11,7 @@
 /// </summary>
 #include <SFML/Graphics.hpp>
 #include "Player.h"
+#include "Client.h"
 
 class Game
 {
@@ -20,7 +21,7 @@ public:
 	/// <summary>
 	/// main method for game
 	/// </summary>
-	void run();
+	void run(Client& t_client);
 	void assignPlayer(int t_playerID);
 private:
 
@@ -36,9 +37,15 @@ private:
 	sf::Time deathTime;
 	sf::Clock deathClock;
 
+	Client* m_client = nullptr;
+
 	Player m_playerGreen;
 	Player m_playerBlue;
 	Player m_playerYellow;
+
+	sf::Vector2f m_greenPos;
+	sf::Vector2f m_bluePos;
+	sf::Vector2f m_yellowPos;
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message

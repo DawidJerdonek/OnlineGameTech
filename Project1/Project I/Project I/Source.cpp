@@ -45,7 +45,7 @@ int main()
 
 	Game game;
 	game.assignPlayer(myClient.m_playerId);
-	game.run();
+	game.run(myClient);
 
 	system("pause");
 	return 0;
