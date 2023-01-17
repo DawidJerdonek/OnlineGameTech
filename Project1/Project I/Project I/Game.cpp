@@ -1,8 +1,5 @@
 /// <summary>
-/// @author Peter Lowe
-/// @date May 2019
-///
-/// you need to change the above lines or lose marks
+/// @author Dawid Jerdonek
 /// </summary>
 
 #include "Game.h"
@@ -17,13 +14,12 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 1920U, 1080U, 32U }, "SFML Game" },
+	m_window{ sf::VideoMode{ 1920U, 1080U, 32U }, "Tag Game" },
 	m_exitGame{false} //when true game will exit
 {
 
 	setupFontAndText(); // load font 
 
-	chooseChaser();
 }
 
 /// <summary>
@@ -52,6 +48,11 @@ void Game::run(Client& t_client)
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	const float fps{ 60.0f };
 	sf::Time timePerFrame = sf::seconds(1.0f / fps); // 60 fps
+	chooseChaser();
+	if (m_client->readyToPlay == true)
+	{
+		deathClock.restart();
+	}
 	while (m_window.isOpen())
 	{
 		processEvents(); // as many as possible
@@ -115,17 +116,17 @@ void Game::processKeys(sf::Event t_event)
 	{
 		if (isPlayerYellow)
 		{
-			m_playerYellow.playerMove(t_event);
+			m_playerYellow.playerMove(t_event, m_client);
 			m_yellowPos = m_playerYellow.m_playerShape.getPosition();
 		}
 		else if (isPlayerGreen)
 		{
-			m_playerGreen.playerMove(t_event);
+			m_playerGreen.playerMove(t_event, m_client);
 			m_greenPos = m_playerGreen.m_playerShape.getPosition();
 		}
 		else if (isPlayerBlue)
 		{
-			m_playerBlue.playerMove(t_event);
+			m_playerBlue.playerMove(t_event, m_client);
 			m_bluePos = m_playerBlue.m_playerShape.getPosition();
 		}
 	}
@@ -145,20 +146,27 @@ void Game::update(sf::Time t_deltaTime)
 	if (m_client->readyToPlay == true)
 	{
 		deathTime = deathClock.getElapsedTime();
+		
 		if (isPlayerGreen)
 		{
 			m_playerGreen.update(t_deltaTime, deathTime);
-			m_client->SendVector(0,m_playerGreen.m_playerShape.getPosition());
+			//m_client->SendVector(0,m_playerGreen.m_playerShape.getPosition());
+			m_playerBlue.m_playerShape.setPosition(m_client->playerPosBlue);
+			m_playerYellow.m_playerShape.setPosition(m_client->playerPosYellow);
 		}
 		if (isPlayerBlue)
 		{
 			m_playerBlue.update(t_deltaTime, deathTime);
-			m_client->SendVector(1, m_playerGreen.m_playerShape.getPosition());
+			//m_client->SendVector(1, m_playerBlue.m_playerShape.getPosition());
+			m_playerGreen.m_playerShape.setPosition(m_client->playerPosGreen);
+			m_playerYellow.m_playerShape.setPosition(m_client->playerPosYellow);
 		}
 		if (isPlayerYellow)
 		{
 			m_playerYellow.update(t_deltaTime, deathTime);
-			m_client->SendVector(2, m_playerGreen.m_playerShape.getPosition());
+			//m_client->SendVector(2, m_playerYellow.m_playerShape.getPosition());
+			m_playerGreen.m_playerShape.setPosition(m_client->playerPosGreen);
+			m_playerBlue.m_playerShape.setPosition(m_client->playerPosBlue);
 		}
 
 
@@ -232,34 +240,36 @@ void Game::setupFontAndText()
 
 
 void Game::chooseChaser()
-{
-	//srand(time(NULL));
-	//int chaserNum = rand() % 3 + 1;
+{	
 	m_playerGreen.m_playerShape.setFillColor(sf::Color::Green);
 	m_playerBlue.m_playerShape.setFillColor(sf::Color::Blue);
 	m_playerYellow.m_playerShape.setFillColor(sf::Color::Yellow);
-	//if (chaserNum == 1)
-	//{
-	//	m_playerGreen.m_isChaser = true;
+
+	if (m_client->chaserNum == 1)
+	{
+		m_playerGreen.m_isChaser = true;
 		m_playerBlue.m_playerShape.setPosition(200, 200);
 		m_playerYellow.m_playerShape.setPosition(1700, 200);
-	//}
-	//else if (chaserNum == 2)
-	//{
-	//	m_playerBlue.m_isChaser = true;
-	//	m_playerGreen.m_playerShape.setPosition(200, 200);
-	//	m_playerYellow.m_playerShape.setPosition(1700, 200);
-	//}
-	//else if (chaserNum == 3)
-	//{
-	//	m_playerYellow.m_isChaser = true;
-	//	m_playerGreen.m_playerShape.setPosition(200, 200);
-	//	m_playerBlue.m_playerShape.setPosition(1700, 200);
-	//}
-	//
-	//m_playerGreen.chaserCheck();
-	//m_playerBlue.chaserCheck();
-	//m_playerYellow.chaserCheck();
+		m_playerGreen.m_playerShape.setFillColor(sf::Color::Red);
+	}
+	else if (m_client->chaserNum == 2)
+	{
+		m_playerBlue.m_isChaser = true;
+		m_playerGreen.m_playerShape.setPosition(200, 200);
+		m_playerYellow.m_playerShape.setPosition(1700, 200);
+		m_playerBlue.m_playerShape.setFillColor(sf::Color::Red);
+	}
+	else if (m_client->chaserNum == 3)
+	{
+		m_playerYellow.m_isChaser = true;
+		m_playerGreen.m_playerShape.setPosition(200, 200);
+		m_playerBlue.m_playerShape.setPosition(1700, 200);
+		m_playerYellow.m_playerShape.setFillColor(sf::Color::Red);
+	}
+	
+	m_playerGreen.chaserCheck();
+	m_playerBlue.chaserCheck();
+	m_playerYellow.chaserCheck();
 }
 
 void Game::checkIfCaught()

@@ -82,6 +82,7 @@ bool Server::SendVector(int ID, sf::Vector2f position, int IDTwo)
 		return false; //Return false: Failed to send string
 
 	std::string _string = std::to_string(IDTwo) + "," + std::to_string(position.x) + "," + std::to_string(position.y);
+	
 	int bufferlength = _string.size(); //Find string buffer length
 
 	if (!SendInt(ID, bufferlength)) //Send length of string buffer, If sending buffer length fails...
@@ -105,7 +106,7 @@ bool Server::GetVector(int ID, sf::Vector2f& position, int& IDTwo)
 	}
 
 	std::vector<std::string> posInfo = splitString(buffer);
-	ID = std::stoi(posInfo[0]);
+	IDTwo = std::stoi(posInfo[0]);
 	position = sf::Vector2f(std::stoi(posInfo[1]), std::stoi(posInfo[2]));
 
 	delete[] buffer; //Deallocate buffer memory (cleanup to prevent memory leak)

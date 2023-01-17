@@ -15,7 +15,7 @@ Player::~Player()
 {
 }
 
-void Player::playerMove(sf::Event t_event)
+void Player::playerMove(sf::Event t_event, Client* t_client)
 {
 	if (sf::Keyboard::W == t_event.key.code || sf::Keyboard::Up == t_event.key.code)
 	{
@@ -33,6 +33,7 @@ void Player::playerMove(sf::Event t_event)
 	{
 		m_playerShape.move(m_speed, 0);
 	}
+	t_client->SendVector(1, m_playerShape.getPosition());
 }
 
 void Player::chaserCheck()

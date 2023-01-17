@@ -21,6 +21,7 @@ public:
 	bool ListenForNewConnection();
 
 	void ReadyToPlay();
+	void ChooseChaser();
 
 private:
 	bool sendall(int ID, char * data, int totalbytes);

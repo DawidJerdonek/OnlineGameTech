@@ -1,5 +1,6 @@
 #include "Client.h"
 
+
 bool Client::ProcessPacket(Packet _packettype)
 {
 	switch (_packettype)
@@ -15,6 +16,18 @@ bool Client::ProcessPacket(Packet _packettype)
 			readyToPlay = true;
 		}
 		std::cout << Message << std::endl; //Display the message to the user
+		if (Message == "1")
+		{
+			chaserNum = 1;
+		}
+		else if (Message == "2")
+		{
+			chaserNum = 2;
+		}
+		else if (Message == "3")
+		{
+			chaserNum = 3;
+		}
 		break;
 	}
 	case P_Id:
@@ -35,15 +48,19 @@ bool Client::ProcessPacket(Packet _packettype)
 		switch (id)
 		{
 		case 0:
-			
+			playerPosGreen = vector;
 			break;
 		case 1:
+			playerPosBlue = vector;
 			break;
 		case 2:
+			playerPosYellow = vector;
 			break;
 		default:
 			break;
 		}
+
+		break;
 	}
 	default: //If packet type is not accounted for
 		std::cout << "Unrecognized packet: " << _packettype << std::endl; //Display that packet was not found

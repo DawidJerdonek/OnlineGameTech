@@ -5,7 +5,7 @@
 #include <WinSock2.h> //For win sockets
 #include <string> //For std::string
 #include <iostream> //For std::cout, std::endl, std::cin.getline
-#include "Player.h"
+#include <SFML/Graphics.hpp>
 
 enum Packet
 {
@@ -23,6 +23,11 @@ public: //Public functions
 	int m_playerId = 0;
 
 	bool readyToPlay = false;
+	int chaserNum = 0;
+
+	sf::Vector2f playerPosGreen;
+	sf::Vector2f playerPosBlue;
+	sf::Vector2f playerPosYellow;
 
 	bool SendString(std::string & _string);
 	bool CloseConnection();
@@ -36,7 +41,6 @@ private: //Private functions
 	bool sendall(char * data, int totalbytes);
 	bool SendInt(int _int);
 	bool SendPacketType(Packet _packettype);
-	bool SendPosition(std::string _string, int _ID);
 
 	//Getting Funcs
 	bool recvall(char * data, int totalbytes);

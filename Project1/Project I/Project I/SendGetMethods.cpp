@@ -121,6 +121,7 @@ bool Client::SendVector(int _ID, sf::Vector2f _position)
 		return false; //Return false: Failed 
 
 	std::string _string = std::to_string(_ID) + "," + std::to_string(_position.x) + "," + std::to_string(_position.y);
+
 	int bufferlength = _string.size(); //Find string buffer length
 
 	if (!SendInt(bufferlength)) //Send length of string buffer, If sending buffer length fails...

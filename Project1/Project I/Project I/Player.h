@@ -1,12 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Client.h"
 class Player
 {
 public:
 	Player();
 	~Player();
 
-	void playerMove(sf::Event t_event);
+	void playerMove(sf::Event t_event, Client* t_client);
 	void chaserCheck();
 	void boundary();
 

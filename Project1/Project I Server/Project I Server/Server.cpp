@@ -59,48 +59,49 @@ bool Server::ProcessPacket(int ID, Packet _packettype)
 {
 	switch (_packettype)
 	{
-	case P_ChatMessage: //Packet Type: chat message
-	{
-		std::string Message; //string to store our message we received
-		if (!GetString(ID, Message)) //Get the chat message and store it in variable: Message
-			return false; //If we do not properly get the chat message, return false
-						  //Next we need to send the message out to each user
-		for (int i = 0; i < TotalConnections; i++)
+		case P_ChatMessage: //Packet Type: chat message
 		{
-			if (i == ID) //If connection is the user who sent the message...
-				continue;//Skip to the next user since there is no purpose in sending the message back to the user who sent it.
-			if (!SendString(i, Message)) //Send message to connection at index i, if message fails to be sent...
+			std::string Message; //string to store our message we received
+			if (!GetString(ID, Message)) //Get the chat message and store it in variable: Message
+				return false; //If we do not properly get the chat message, return false
+							  //Next we need to send the message out to each user
+			for (int i = 0; i < TotalConnections; i++)
 			{
-				std::cout << "Failed to send message from client ID: " << ID << " to client ID: " << i << std::endl;
+				if (i == ID) //If connection is the user who sent the message...
+					continue;//Skip to the next user since there is no purpose in sending the message back to the user who sent it.
+				if (!SendString(i, Message)) //Send message to connection at index i, if message fails to be sent...
+				{
+					std::cout << "Failed to send message from client ID: " << ID << " to client ID: " << i << std::endl;
+				}
 			}
+			std::cout << "Processed chat message packet from user ID: " << ID << std::endl;
+			break;
 		}
-		std::cout << "Processed chat message packet from user ID: " << ID << std::endl;
-		break;
-	}
-	case P_Vector2f:
-	{
-		sf::Vector2f Message; //string to store our message we received
-		int IDTwo = 999;
-		if (!GetVector(ID, Message, IDTwo)) //Get the chat message and store it in variable: Message
-			return false; //If we do not properly get the chat message, return false
-		//Next we need to send the message out to each user
-		for (int i = 0; i < TotalConnections; i++)
+		case P_Vector2f:
 		{
-			if (i == ID) //If connection is the user who sent the message...
-				continue;//Skip to the next user since there is no purpose in sending the message back to the user who sent it.
-			if (!SendVector(i, Message, ID)) //Send message to connection at index i, if message fails to be sent...
+			sf::Vector2f vector; //string to store our message we received
+			int IDTwo = -2;
+			if (!GetVector(ID, vector, IDTwo)) //Get the chat message and store it in variable: Message
+				return false; //If we do not properly get the chat message, return false
+			//Next we need to send the message out to each user
+			for (int i = 0; i < TotalConnections; i++)
 			{
-				std::cout << "Failed to send message from client ID: " << ID << " to client ID: " << i << std::endl;
+				if (i == ID) //If connection is the user who sent the message...
+					continue;//Skip to the next user since there is no purpose in sending the message back to the user who sent it.
+			
+				if (!SendVector(i, vector, ID)) //Send message to connection at index i, if message fails to be sent...
+				{
+					std::cout << "Failed to send Vector from client ID: " << ID << " to client ID: " << i << std::endl;
+				}
 			}
+			std::cout << "Processed Vector packet from user ID: " << ID << std::endl;
+			break;
 		}
-		std::cout << "Processed chat message packet from user ID: " << ID << std::endl;
-		break;
-	}
-	default: //If packet type is not accounted for
-	{
-		std::cout << "Unrecognized packet: " << _packettype << std::endl; //Display that packet was not found
-		break;
-	}
+		default: //If packet type is not accounted for
+		{
+			std::cout << "Unrecognized packet: " << _packettype << std::endl; //Display that packet was not found
+			break;
+		}
 	}
 	
 	return true;
@@ -132,12 +133,24 @@ void Server::ReadyToPlay()
 {
 	if (TotalConnections == 3 && gameReady == false)
 	{
+		ChooseChaser();
 		gameReady = true;
 		std::string startKey = "BeginGame";
 		for (int i = 0; i < 3; i++)
 		{
 			SendString(i,startKey);
 		}
+	}
+}
+
+void Server::ChooseChaser()
+{	
+	srand(time(NULL));
+	int chaserNum = rand() % 3 + 1;
+	std::string chaserString = std::to_string(chaserNum);
+	for (int i = 0; i < 3; i++)
+	{
+		SendString(i, chaserString);
 	}
 }
 
