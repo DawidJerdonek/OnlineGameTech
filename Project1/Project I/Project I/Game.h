@@ -55,6 +55,8 @@ private:
 	/// </summary>
 	sf::Text m_deathTimes[3];
 
+	int m_resetCounter = 0;
+
 	bool isPlayerGreen = false;
 	bool isPlayerBlue= false;
 	bool isPlayerYellow = false;

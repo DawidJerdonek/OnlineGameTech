@@ -2,15 +2,15 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\gameuser\Desktop\OnlineGameTech\OnlineGameTech\Project1\Project I Server\Debug\Project I Server.exe</FullPath>
+      <FullPath>C:\Users\DJay Gaming\Desktop\gametech\OnlineGameTechLab1\Project1\Project I Server\Debug\Project I Server.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\gameuser\Desktop\OnlineGameTech\OnlineGameTech\Project1\Project I Server\Project I Server\ASSETS\FONTS\ariblk.ttf</FullPath>
+      <FullPath>C:\Users\DJay Gaming\Desktop\gametech\OnlineGameTechLab1\Project1\Project I Server\Project I Server\ASSETS\FONTS\ariblk.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\gameuser\Desktop\OnlineGameTech\OnlineGameTech\Project1\Project I Server\Project I Server\ASSETS\IMAGES\SFML-LOGO.png</FullPath>
+      <FullPath>C:\Users\DJay Gaming\Desktop\gametech\OnlineGameTechLab1\Project1\Project I Server\Project I Server\ASSETS\IMAGES\SFML-LOGO.png</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

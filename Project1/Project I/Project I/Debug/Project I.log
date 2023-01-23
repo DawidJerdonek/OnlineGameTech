@@ -1,2 +1,20 @@
-﻿  Game.cpp
-  Project I.vcxproj -> C:\Users\gameuser\Desktop\OnlineGameTech\OnlineGameTech\Project1\Project I\Debug\Project I.exe
+﻿  Client.cpp
+  Game.cpp
+  Player.cpp
+C:\Users\DJay Gaming\Desktop\gametech\OnlineGameTechLab1\Project1\Project I\Project I\Player.cpp(8,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\DJay Gaming\Desktop\gametech\OnlineGameTechLab1\Project1\Project I\Project I\Player.cpp(11,35): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\DJay Gaming\Desktop\gametech\OnlineGameTechLab1\Project1\Project I\Project I\Player.cpp(11,28): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  SendGetMethods.cpp
+C:\Users\DJay Gaming\Desktop\gametech\OnlineGameTechLab1\Project1\Project I\Project I\SendGetMethods.cpp(112,58): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\DJay Gaming\Desktop\gametech\OnlineGameTechLab1\Project1\Project I\Project I\SendGetMethods.cpp(112,35): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  Source.cpp
+  Generating Code...
+  Project I.vcxproj -> C:\Users\DJay Gaming\Desktop\gametech\OnlineGameTechLab1\Project1\Project I\Debug\Project I.exe

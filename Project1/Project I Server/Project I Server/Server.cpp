@@ -148,6 +148,7 @@ void Server::ChooseChaser()
 	srand(time(NULL));
 	int chaserNum = rand() % 3 + 1;
 	std::string chaserString = std::to_string(chaserNum);
+	std::cout << chaserString << std::endl;
 	for (int i = 0; i < 3; i++)
 	{
 		SendString(i, chaserString);

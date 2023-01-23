@@ -5,10 +5,14 @@ Player::Player()
 {
 	m_playerShape.setRadius(20);
 	m_playerShape.setOrigin(10,10);
-	m_playerShape.setPosition(100,100);
+	srand(time(NULL));
+	int randX = rand() % 800 + 1;
+	int randY = rand() % 800 + 1;
+	m_playerShape.setPosition(randX, randY);
 	m_playerShape.setFillColor(sf::Color::Yellow);
 	m_playerShape.setOutlineColor(sf::Color::White);
 	m_playerShape.setOutlineThickness(2.0f);
+
 }
 
 Player::~Player()
@@ -42,7 +46,7 @@ void Player::chaserCheck()
 	{
 		m_playerShape.setFillColor(sf::Color::Red);
 		m_playerShape.setPosition(1000,1000);
-		m_speed = 5.0f;
+		m_speed = 9.0f;
 	}
 }
 

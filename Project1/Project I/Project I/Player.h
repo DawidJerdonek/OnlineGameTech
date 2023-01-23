@@ -22,7 +22,7 @@ public:
 private:
 
 	bool m_timeDisplayed = false;
-	float m_speed = 5.5f;
+	float m_speed = 10.0f;
 
 	void displayDeathTime(sf::Time t_time);
 };
