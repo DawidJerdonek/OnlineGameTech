@@ -71,7 +71,7 @@ void Player::boundary()
 }
 
 
-void Player::update(sf::Time t_deltaTime, sf::Time t_deathTime)
+void Player::update(sf::Time t_deltaTime, sf::Time t_deathTime, Client* t_client)
 {
 	if (m_isAlive)
 	{
@@ -84,6 +84,11 @@ void Player::update(sf::Time t_deltaTime, sf::Time t_deathTime)
 		{
 			displayDeathTime(t_deathTime);
 		}
+	}
+	if (m_initialPosSender < 1)
+	{
+		t_client->SendVector(1, m_playerShape.getPosition());
+		m_initialPosSender++;
 	}
 }
 

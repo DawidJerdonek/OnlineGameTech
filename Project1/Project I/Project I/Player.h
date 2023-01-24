@@ -11,7 +11,7 @@ public:
 	void chaserCheck();
 	void boundary();
 
-	void update(sf::Time t_deltaTime, sf::Time t_deathTime);
+	void update(sf::Time t_deltaTime, sf::Time t_deathTime, Client* t_client);
 	void render(sf::RenderWindow& m_window);
 
 	int m_playerId = 0;
@@ -21,6 +21,7 @@ public:
 
 private:
 
+	int m_initialPosSender = 0;
 	bool m_timeDisplayed = false;
 	float m_speed = 10.0f;
 

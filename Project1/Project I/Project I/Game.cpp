@@ -162,19 +162,19 @@ void Game::update(sf::Time t_deltaTime)
 		
 		if (isPlayerGreen)
 		{
-			m_playerGreen.update(t_deltaTime, deathTime);
+			m_playerGreen.update(t_deltaTime, deathTime, m_client);
 			m_playerBlue.m_playerShape.setPosition(m_client->playerPosBlue);
 			m_playerYellow.m_playerShape.setPosition(m_client->playerPosYellow);
 		}
 		if (isPlayerBlue)
 		{
-			m_playerBlue.update(t_deltaTime, deathTime);
+			m_playerBlue.update(t_deltaTime, deathTime, m_client);
 			m_playerGreen.m_playerShape.setPosition(m_client->playerPosGreen);
 			m_playerYellow.m_playerShape.setPosition(m_client->playerPosYellow);
 		}
 		if (isPlayerYellow)
 		{
-			m_playerYellow.update(t_deltaTime, deathTime);
+			m_playerYellow.update(t_deltaTime, deathTime, m_client);
 			m_playerGreen.m_playerShape.setPosition(m_client->playerPosGreen);
 			m_playerBlue.m_playerShape.setPosition(m_client->playerPosBlue);
 		}
@@ -182,16 +182,31 @@ void Game::update(sf::Time t_deltaTime)
 		if (m_client->chaserNum == 1)
 		{
 			m_playerGreen.m_playerShape.setFillColor(sf::Color::Red);
+
+			if (m_playerBlue.m_isAlive || m_playerYellow.m_isAlive)
+			{
+				m_chaseMessage.setString("Red is the chaser\nTime elapsed: " + std::to_string(static_cast<int>(deathClock.getElapsedTime().asSeconds())));
+			}
 		}
 
 		if (m_client->chaserNum == 2)
 		{
 			m_playerBlue.m_playerShape.setFillColor(sf::Color::Red);
+
+			if (m_playerGreen.m_isAlive || m_playerYellow.m_isAlive)
+			{
+				m_chaseMessage.setString("Red is the chaser\nTime elapsed: " + std::to_string(static_cast<int>(deathClock.getElapsedTime().asSeconds())));
+			}
 		}
 
 		if (m_client->chaserNum == 3)
 		{
 			m_playerYellow.m_playerShape.setFillColor(sf::Color::Red);
+
+			if (m_playerBlue.m_isAlive || m_playerGreen.m_isAlive)
+			{
+				m_chaseMessage.setString("Red is the chaser\nTime elapsed: " + std::to_string(static_cast<int>(deathClock.getElapsedTime().asSeconds())));
+			}
 		}
 
 		m_resetCounter++;
@@ -199,7 +214,7 @@ void Game::update(sf::Time t_deltaTime)
 		{
 			checkIfCaught();
 		}
-		m_chaseMessage.setString("Red is the chaser\nTime elapsed: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
+	
 
 	}
 	if (m_exitGame)
@@ -238,7 +253,7 @@ void Game::setupFontAndText()
 		std::cout << "problem loading arial black font" << std::endl;
 	}
 	m_chaseMessage.setFont(m_ArialBlackfont);
-	m_chaseMessage.setString("Red is the chaser\nTime elapsed: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
+	m_chaseMessage.setString("Red is the chaser\nTime elapsed: " + std::to_string(static_cast<int>(deathClock.getElapsedTime().asSeconds())));
 	m_chaseMessage.setStyle(sf::Text::Underlined | sf::Text::Italic | sf::Text::Bold);
 	m_chaseMessage.setPosition(700.0f, 20.0f);
 	m_chaseMessage.setCharacterSize(30U);
@@ -316,7 +331,7 @@ void Game::checkIfCaught()
 			std::cout << "Chaser Red and Player Blue are colliding" << std::endl;
 			if (m_playerBlue.m_isAlive)
 			{
-				m_deathTimes[1].setString("Player Blue has survived for: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
+				m_deathTimes[1].setString("Player Blue has survived for: " + std::to_string(static_cast<int>(deathClock.getElapsedTime().asSeconds())));
 				m_playerBlue.m_isAlive = false;
 			}
 		}
@@ -325,7 +340,7 @@ void Game::checkIfCaught()
 			std::cout << "Chaser Red and Player Yellow are colliding" << std::endl;
 			if (m_playerYellow.m_isAlive)
 			{
-				m_deathTimes[2].setString("Player Yellow has survived for: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
+				m_deathTimes[2].setString("Player Yellow has survived for: " + std::to_string(static_cast<int>(deathClock.getElapsedTime().asSeconds())));
 				m_playerYellow.m_isAlive = false;
 			}
 		}
@@ -337,7 +352,7 @@ void Game::checkIfCaught()
 			std::cout << "Chaser Red and Player Green are colliding" << std::endl;
 			if (m_playerGreen.m_isAlive)
 			{
-				m_deathTimes[0].setString("Player Green has survived for: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
+				m_deathTimes[0].setString("Player Green has survived for: " + std::to_string(static_cast<int>(deathClock.getElapsedTime().asSeconds())));
 				m_playerGreen.m_isAlive = false;
 			}
 		}
@@ -346,7 +361,7 @@ void Game::checkIfCaught()
 			std::cout << "Chaser Red and Player Yellow are colliding" << std::endl;
 			if (m_playerYellow.m_isAlive)
 			{
-				m_deathTimes[2].setString("Player Yellow has survived for: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
+				m_deathTimes[2].setString("Player Yellow has survived for: " + std::to_string(static_cast<int>(deathClock.getElapsedTime().asSeconds())));
 				m_playerYellow.m_isAlive = false;
 			}
 		}
@@ -358,7 +373,7 @@ void Game::checkIfCaught()
 			std::cout << "Chaser Red and Player Green are colliding" << std::endl;
 			if (m_playerGreen.m_isAlive)
 			{
-				m_deathTimes[0].setString("Player Green has survived for: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
+				m_deathTimes[0].setString("Player Green has survived for: " + std::to_string(static_cast<int>(deathClock.getElapsedTime().asSeconds())));
 				m_playerGreen.m_isAlive = false;
 			}
 		}
@@ -367,7 +382,7 @@ void Game::checkIfCaught()
 			if (m_playerBlue.m_isAlive)
 			{
 				std::cout << "Chaser Red and Player Blue are colliding" << std::endl;
-				m_deathTimes[1].setString("Player Blue has survived for: " + std::to_string(deathClock.getElapsedTime().asSeconds()));
+				m_deathTimes[1].setString("Player Blue has survived for: " + std::to_string(static_cast<int>(deathClock.getElapsedTime().asSeconds())));
 				m_playerBlue.m_isAlive = false;
 			}
 		}
